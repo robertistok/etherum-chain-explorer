@@ -3,9 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@aragon/ui": "^0.40.2",
+    "@reach/router": "^1.2.1",
+    "lodash-es": "^4.17.15",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
-    "react-scripts": "3.2.0"
+    "react-scripts": "3.2.0",
+    "react-spring": "^8.0.27",
+    "styled-components": "^4.4.0",
+    "web3": "^1.2.1"
   },
   "scripts": {
     "start": "react-scripts start",

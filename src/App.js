@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import styled from "styled-components";
+import { Router } from "@reach/router";
+import { Main } from "@aragon/ui";
 
-function App() {
+import EtherumProvider from "./components/EtherumProvider";
+import LatestBlocks from "./components/LatestBlocks";
+import Block from "./components/Block";
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Root>
+      <Main>
+        <EtherumProvider>
+          <Router>
+            <LatestBlocks path="/" />
+            <Block path="block/:number" />
+          </Router>
+        </EtherumProvider>
+      </Main>
+    </Root>
   );
-}
+};
+
+const Root = styled.main`
+  flex-direction: column;
+  display: flex;
+  max-width: 80%;
+  margin: 20px auto;
+`;
 
 export default App;
