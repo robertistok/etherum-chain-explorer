@@ -7,15 +7,19 @@ import EtherumProvider from "./components/EtherumProvider";
 import LatestBlocks from "./components/LatestBlocks";
 import Block from "./components/Block";
 
+import { LatestBlocksStateProvider } from "./state/latestBlocks";
+
 const App = () => {
   return (
     <Root>
       <Main>
         <EtherumProvider>
-          <Router>
-            <LatestBlocks path="/" />
-            <Block path="block/:number" />
-          </Router>
+          <LatestBlocksStateProvider>
+            <Router>
+              <LatestBlocks path="/" />
+              <Block path="block/:number" />
+            </Router>
+          </LatestBlocksStateProvider>
         </EtherumProvider>
       </Main>
     </Root>

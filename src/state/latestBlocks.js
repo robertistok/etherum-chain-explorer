@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext, createContext } from "react";
 
 import { getLatestNBlocks } from "../utils/web3";
 import useInterval from "../hooks/useInterval";
 
 const useLatestBlocks = () => {
   const [latestBlocks, setLatestBlocks] = useState([]);
-  const [latestBlock, setLatestBlock] = useState(undefined);
+  const [latestBlockNumber, setLatestBlockNumber] = useState(undefined);
+  const [lastUpdated, setLastUpdated] = useState(undefined);
 
   const storeBlock = block =>
     setLatestBlocks(prev =>
@@ -27,29 +28,43 @@ const useLatestBlocks = () => {
     if (latestBlocks.length) {
       const firstBlock = latestBlocks[0];
 
-      if (!latestBlock || latestBlock.number !== firstBlock.number) {
-        setLatestBlock(firstBlock);
+      if (!latestBlockNumber || latestBlockNumber !== firstBlock.number) {
+        setLatestBlockNumber(firstBlock.number);
       }
     }
-  }, [latestBlocks, latestBlock]);
+  }, [latestBlocks, latestBlockNumber]);
 
   useInterval(() => {
     async function updateBlocks() {
       const fetchDataResponse = await window.web3.eth.getBlockNumber();
 
-      if (fetchDataResponse !== latestBlock.number) {
+      if (fetchDataResponse !== latestBlockNumber) {
         getLatestNBlocks({
-          n: fetchDataResponse - latestBlock.number,
+          n: fetchDataResponse - latestBlockNumber,
           storeBlock,
           latest: fetchDataResponse
         });
       }
+
+      setLastUpdated(new Date().getTime());
     }
 
     updateBlocks();
   }, 10000);
 
-  return [{ latestBlock, latestBlocks }];
+  return { latestBlockNumber, latestBlocks, lastUpdated };
 };
 
-export default useLatestBlocks;
+export const LatestBlocksStateContext = createContext();
+
+export const LatestBlocksStateProvider = ({
+  rowsCount,
+  columnsCount,
+  children
+}) => (
+  <LatestBlocksStateContext.Provider value={useLatestBlocks()}>
+    {children}
+  </LatestBlocksStateContext.Provider>
+);
+export const useLatestBlocksStateValue = () =>
+  useContext(LatestBlocksStateContext);

@@ -5,9 +5,13 @@ import { Text } from "@aragon/ui";
 import { Title } from "../common";
 
 import promisify from "../../utils/promisify";
+import { useLatestBlocksStateValue } from "../../state/latestBlocks";
 
 const Block = ({ number }) => {
+  const numberParsed = Number(number);
   const [block, setBlock] = useState(undefined);
+  const { latestBlockNumber, latestBlocks } = useLatestBlocksStateValue();
+
   useEffect(() => {
     async function fetchData() {
       const response = await promisify(cb =>
@@ -16,14 +20,30 @@ const Block = ({ number }) => {
       setBlock(response);
     }
 
-    fetchData();
-  }, [number]);
+    const alreadyFetchedBlock = latestBlocks.find(
+      b => b && b.number === numberParsed
+    );
+
+    if (alreadyFetchedBlock) {
+      setBlock(alreadyFetchedBlock);
+    } else {
+      fetchData();
+    }
+  }, [latestBlocks, number, numberParsed]);
 
   return (
     <Root>
       <Title>Block #{number}</Title>
 
-      {block === null && <span>Block not mined yet...</span>}
+      {block === null && (
+        <div>
+          <p>Block not mined yet...</p>
+          <p>
+            <strong>{numberParsed - latestBlockNumber}</strong> blocks in front
+            of it
+          </p>
+        </div>
+      )}
 
       {block && (
         <BlockInfo>
