@@ -1,6 +1,7 @@
-import { useReducer, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import { getLatestNBlocks } from "../utils/web3";
+import useInterval from "../hooks/useInterval";
 
 const useLatestBlocks = () => {
   const [latestBlocks, setLatestBlocks] = useState([]);
@@ -26,28 +27,17 @@ const useLatestBlocks = () => {
     if (latestBlocks.length) {
       const firstBlock = latestBlocks[0];
 
-      if (atestBlock) {
-        console.log(latestBlock.number, firstBlock.number);
-      }
       if (!latestBlock || latestBlock.number !== firstBlock.number) {
         setLatestBlock(firstBlock);
       }
     }
   }, [latestBlocks, latestBlock]);
 
-  useEffect(() => {
-    let fetchDataResponse;
-    let timeout;
-    let interval;
+  useInterval(() => {
+    async function updateBlocks() {
+      const fetchDataResponse = await window.web3.eth.getBlockNumber();
 
-    async function fetchData() {
-      fetchDataResponse = await window.web3.eth.getBlockNumber();
-
-      console.log(fetchDataResponse);
-
-      if (fetchDataResponse === latestBlock.number) {
-        console.log("yay");
-      } else {
+      if (fetchDataResponse !== latestBlock.number) {
         getLatestNBlocks({
           n: fetchDataResponse - latestBlock.number,
           storeBlock,
@@ -56,21 +46,8 @@ const useLatestBlocks = () => {
       }
     }
 
-    if (latestBlock) {
-      timeout = setTimeout(
-        () =>
-          setInterval(() => {
-            interval = fetchData();
-          }, 10000),
-        10000
-      );
-    }
-
-    return () => {
-      clearTimeout(timeout);
-      clearInterval(interval);
-    };
-  }, [latestBlock]);
+    updateBlocks();
+  }, 10000);
 
   return [{ latestBlock, latestBlocks }];
 };
