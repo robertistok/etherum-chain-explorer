@@ -6,6 +6,7 @@
     "@aragon/ui": "^0.40.2",
     "@reach/router": "^1.2.1",
     "lodash-es": "^4.17.15",
+    "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",

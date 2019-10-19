@@ -7,10 +7,11 @@ import { Table, TableHeader, TableRow } from "@aragon/ui";
 import { Title } from "../common";
 import BlockRow from "./BlockRow";
 
-import useLatestBlocks from "../../state/latestBlocks";
+import { useLatestBlocksStateValue } from "../../state/latestBlocks";
+import { formatTime } from "../../utils/time";
 
 const LatestBlocks = () => {
-  const [{ latestBlocks }] = useLatestBlocks();
+  const { latestBlocks, lastUpdated } = useLatestBlocksStateValue();
 
   const transitions = useTransition(latestBlocks, block => block.hash, {
     from: item => ({
@@ -24,11 +25,16 @@ const LatestBlocks = () => {
   return (
     <Root>
       <Title>Latest blocks</Title>
-      <Table
+      <span>
+        <em>{`Last updated: ${
+          lastUpdated ? formatTime({ timestamp: lastUpdated }) : "never"
+        }`}</em>
+      </span>
+      <StyledTable
         header={
           <TableRow>
             <TableHeader title="Block" />
-            <TableHeader title="Age" />
+            <TableHeader title="Mined" />
             <TableHeader title="Txn" />
             <TableHeader title="Miner" />
             <TableHeader title="Gas used" />
@@ -38,11 +44,15 @@ const LatestBlocks = () => {
         {transitions.map(({ item, props: animationProps, key }) => (
           <BlockRow key={key} animationProps={animationProps} {...item} />
         ))}
-      </Table>
+      </StyledTable>
     </Root>
   );
 };
 
 const Root = styled.section``;
+
+const StyledTable = styled(Table)`
+  margin: 20px 0px;
+`;
 
 export default LatestBlocks;

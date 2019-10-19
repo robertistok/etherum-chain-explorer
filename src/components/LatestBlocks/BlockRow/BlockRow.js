@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { animated } from "react-spring";
 import { Link } from "@reach/router";
+import moment from "moment";
 import { ExternalLink, ProgressBar, TableRow, TableCell } from "@aragon/ui";
 
 const BlockRow = ({
@@ -21,7 +22,7 @@ const BlockRow = ({
       <TableCell>
         <Link to={`/block/${number}`}>{number}</Link>
       </TableCell>
-      <TableCell>{timestamp}</TableCell>
+      <TableCell>{moment.unix(timestamp).fromNow()}</TableCell>
       <TableCell>{transactions.length}</TableCell>
       <TableCell>
         <ExternalLink href={`https://etherscan.io/address/${miner}`}>
