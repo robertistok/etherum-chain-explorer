@@ -24,11 +24,7 @@ const BlockRow = ({
       <TableCell>{number}</TableCell>
       <TableCell>{moment.unix(timestamp).fromNow()}</TableCell>
       <TableCell>{transactions.length}</TableCell>
-      <TableCell>
-        <ExternalLink href={`https://etherscan.io/address/${miner}`}>
-          {miner.slice(2, 7)}...
-        </ExternalLink>
-      </TableCell>
+      <TableCell>{miner.slice(2, 7)}...</TableCell>
       <TableCell>
         <ProgressBar value={usedGasPercentage} title="test" />
       </TableCell>
