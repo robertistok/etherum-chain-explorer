@@ -10,7 +10,9 @@ const useLatestBlocks = () => {
 
   const storeBlock = block =>
     setLatestBlocks(prev =>
-      [...prev, block].sort((a, b) => b.number - a.number)
+      [...prev, block]
+        .filter(block => Boolean(block))
+        .sort((a, b) => b.number - a.number)
     );
 
   useEffect(() => {
