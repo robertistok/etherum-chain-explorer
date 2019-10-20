@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { animated } from "react-spring";
 import { navigate } from "@reach/router";
 import moment from "moment";
-import { ExternalLink, ProgressBar, TableRow, TableCell } from "@aragon/ui";
+import { ProgressBar, TableRow, TableCell } from "@aragon/ui";
 
 const BlockRow = ({
   gasUsed,
