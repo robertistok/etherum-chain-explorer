@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { animated } from "react-spring";
-import { Link } from "@reach/router";
+import { navigate } from "@reach/router";
 import moment from "moment";
 import { ExternalLink, ProgressBar, TableRow, TableCell } from "@aragon/ui";
 
@@ -17,11 +17,11 @@ const BlockRow = ({
 }) => {
   const usedGasPercentage = gasUsed / gasLimit;
 
+  const handleRowClick = () => navigate(`/block/${number}`);
+
   return (
-    <StyledAnimatedTableRow style={animationProps}>
-      <TableCell>
-        <Link to={`/block/${number}`}>{number}</Link>
-      </TableCell>
+    <StyledAnimatedTableRow style={animationProps} onClick={handleRowClick}>
+      <TableCell>{number}</TableCell>
       <TableCell>{moment.unix(timestamp).fromNow()}</TableCell>
       <TableCell>{transactions.length}</TableCell>
       <TableCell>
