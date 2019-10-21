@@ -21,11 +21,13 @@ const BlockRow = ({
 
   return (
     <StyledAnimatedTableRow style={animationProps} onClick={handleRowClick}>
-      <TableCell>{number}</TableCell>
-      <TableCell>{moment.unix(timestamp).fromNow()}</TableCell>
-      <TableCell>{transactions.length}</TableCell>
-      <TableCell>{miner.slice(2, 7)}...</TableCell>
-      <TableCell>
+      <TableCell style={{ width: "10%" }}>{number}</TableCell>
+      <TableCell style={{ width: "30%" }}>
+        {moment.unix(timestamp).fromNow()}
+      </TableCell>
+      <TableCell style={{ width: "15%" }}>{transactions.length}</TableCell>
+      <TableCell style={{ width: "20%" }}>{miner.slice(2, 7)}...</TableCell>
+      <TableCell style={{ width: "25%" }}>
         <ProgressBar value={usedGasPercentage} title="test" />
       </TableCell>
     </StyledAnimatedTableRow>
