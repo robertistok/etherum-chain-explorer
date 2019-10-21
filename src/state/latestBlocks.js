@@ -4,8 +4,12 @@ import { getLatestNBlocks } from "../utils/web3";
 import useInterval from "../hooks/useInterval";
 
 const useLatestBlocks = () => {
-  const [latestBlocks, setLatestBlocks] = useState([]);
-  const [latestBlockNumber, setLatestBlockNumber] = useState(undefined);
+  const cachedBlocks = JSON.parse(localStorage.getItem("latestBlocks"));
+
+  const [latestBlocks, setLatestBlocks] = useState(cachedBlocks || []);
+  const [latestBlockNumber, setLatestBlockNumber] = useState(
+    cachedBlocks ? cachedBlocks[0].number : undefined
+  );
   const [lastUpdated, setLastUpdated] = useState(undefined);
 
   const storeBlock = block =>
@@ -15,16 +19,36 @@ const useLatestBlocks = () => {
         .sort((a, b) => b.number - a.number)
     );
 
-  useEffect(() => {
-    async function fetchData() {
+  async function fetchNewBlocks() {
+    const fetchDataResponse = await window.web3.eth.getBlockNumber();
+
+    if (fetchDataResponse !== latestBlockNumber) {
+      const numberOfBlocksToFetch = latestBlockNumber
+        ? fetchDataResponse - latestBlockNumber
+        : 10;
       getLatestNBlocks({
-        n: 10,
-        storeBlock
+        n: numberOfBlocksToFetch,
+        storeBlock,
+        latest: fetchDataResponse
       });
     }
+  }
 
-    fetchData();
-  }, []);
+  useEffect(() => {
+    fetchNewBlocks();
+    // we want to run this only once, as we are going to get the update in the interval
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); //
+
+  // cache the last 10 blocks
+  useEffect(() => {
+    if (latestBlocks.length) {
+      localStorage.setItem(
+        "latestBlocks",
+        JSON.stringify(latestBlocks.slice(0, 10))
+      );
+    }
+  }, [latestBlocks]);
 
   useEffect(() => {
     if (latestBlocks.length) {
@@ -37,24 +61,11 @@ const useLatestBlocks = () => {
   }, [latestBlocks, latestBlockNumber]);
 
   useInterval(() => {
-    async function updateBlocks() {
-      const fetchDataResponse = await window.web3.eth.getBlockNumber();
-
-      if (fetchDataResponse !== latestBlockNumber) {
-        getLatestNBlocks({
-          n: fetchDataResponse - latestBlockNumber,
-          storeBlock,
-          latest: fetchDataResponse
-        });
-      }
-
-      setLastUpdated(new Date().getTime());
-    }
-
-    updateBlocks();
+    fetchNewBlocks();
+    setLastUpdated(new Date().getTime());
   }, 10000);
 
-  return { latestBlockNumber, latestBlocks, lastUpdated };
+  return { latestBlockNumber, latestBlocks, lastUpdated, storeBlock };
 };
 
 export const LatestBlocksStateContext = createContext();
