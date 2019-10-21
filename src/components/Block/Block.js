@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "@reach/router";
 import { Button, Text } from "@aragon/ui";
@@ -11,39 +11,38 @@ import { useLatestBlocksStateValue } from "../../state/latestBlocks";
 
 const Block = ({ number }) => {
   const numberParsed = Number(number);
-  const [block, setBlock] = useState(undefined);
-  const { latestBlockNumber, latestBlocks } = useLatestBlocksStateValue();
+  const {
+    latestBlockNumber,
+    latestBlocks,
+    storeBlock
+  } = useLatestBlocksStateValue();
+
+  const block = latestBlocks.find(b => b && b.number === numberParsed);
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchBlock() {
       const response = await promisify(cb =>
         window.web3.eth.getBlock(number, cb)
       );
-      setBlock(response);
+      storeBlock(response);
     }
 
-    const alreadyFetchedBlock = latestBlocks.find(
-      b => b && b.number === numberParsed
-    );
-
-    if (alreadyFetchedBlock) {
-      setBlock(alreadyFetchedBlock);
-    } else {
-      fetchData();
+    if (!block) {
+      fetchBlock();
     }
-  }, [latestBlocks, number, numberParsed]);
+  }, [block, latestBlocks, number, numberParsed, storeBlock]);
 
   return (
     <Root>
       <Title>Block #{number}</Title>
 
       <BlockInfo>
-        {block === null && (
+        {!block && (
           <>
             <p>Block not mined yet...</p>
             <p>
-              <strong>{numberParsed - latestBlockNumber}</strong> block(s) in
-              front of it
+              <strong>{numberParsed - latestBlockNumber}</strong> more block(s)
+              in front of it
             </p>
           </>
         )}
