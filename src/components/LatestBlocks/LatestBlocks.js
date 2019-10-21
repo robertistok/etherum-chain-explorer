@@ -34,7 +34,7 @@ const LatestBlocks = () => {
   return (
     <Root>
       <Title>
-        Latest blocks (updated:&nbsp;
+        Latest blocks on the Etherum chain (updated:&nbsp;
         <em>
           {`${lastUpdated ? formatTime({ timestamp: lastUpdated }) : "never"}`}
         </em>
