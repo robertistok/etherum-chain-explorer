@@ -10,33 +10,29 @@ import { useDataApi } from "../../hooks";
 
 const BlockPage = ({ number }) => {
   const numberParsed = Number(number);
+
+  const { storeBlock, findBlock } = useLatestBlocksStateValue();
+
+  const alreadyFetchedBlock = findBlock(numberParsed);
+  const [block, setBlock] = useState(alreadyFetchedBlock);
+
   const getBlock = useCallback(
-    () => promisify(cb => window.web3.eth.getBlock(number, cb)),
+    () => promisify(cb => window.web3.eth.getBlock(number, true, cb)),
     [number]
   );
 
-  const { latestBlocks, storeBlock, findBlock } = useLatestBlocksStateValue();
-  const [{ data, isLoading }, fetchBlock] = useDataApi({
-    dataFetcher: getBlock
+  const [{ data, isLoading }] = useDataApi({
+    dataFetcher: !alreadyFetchedBlock ? getBlock : null
   });
-  const [block, setBlock] = useState();
 
   useEffect(() => {
-    storeBlock(data);
-    setBlock(data);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
-  useEffect(() => {
-    if (!block && !isLoading) {
-      fetchBlock();
+    const blockValueToSet = alreadyFetchedBlock || data;
+    if (data && !alreadyFetchedBlock) {
+      storeBlock(data);
     }
+    setBlock(blockValueToSet);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchBlock]);
-  useEffect(() => {
-    const alreadyFetchedBlock = findBlock(numberParsed);
-
-    setBlock(alreadyFetchedBlock);
-  }, [findBlock, latestBlocks, numberParsed]);
+  }, [data, alreadyFetchedBlock]);
 
   return (
     <Root>
