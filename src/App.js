@@ -5,7 +5,7 @@ import { Main } from "@aragon/ui";
 
 import EtherumProvider from "./components/EtherumProvider";
 import LatestBlocks from "./components/LatestBlocks";
-import Block from "./components/Block";
+import BlockPage from "./components/BlockPage";
 
 import { LatestBlocksStateProvider } from "./state/latestBlocks";
 
@@ -17,7 +17,7 @@ const App = () => {
           <LatestBlocksStateProvider>
             <Router>
               <LatestBlocks path="/" />
-              <Block path="block/:number" />
+              <BlockPage path="block/:number" />
             </Router>
           </LatestBlocksStateProvider>
         </EtherumProvider>
