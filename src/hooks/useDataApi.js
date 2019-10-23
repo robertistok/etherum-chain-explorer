@@ -7,15 +7,17 @@ const useDataApi = ({ dataFetcher, initialData }) => {
   const [isError, setIsError] = useState(false);
 
   const fetchData = useCallback(async () => {
-    setIsError(false);
-    setIsLoading(true);
-    try {
-      const result = await dataFetcher();
-      setData(result);
-    } catch (error) {
-      setIsError(true);
+    if (dataFetcher) {
+      setIsError(false);
+      setIsLoading(true);
+      try {
+        const result = await dataFetcher();
+        setData(result);
+      } catch (error) {
+        setIsError(true);
+      }
+      setIsLoading(false);
     }
-    setIsLoading(false);
   }, [dataFetcher]);
 
   useEffect(() => {
