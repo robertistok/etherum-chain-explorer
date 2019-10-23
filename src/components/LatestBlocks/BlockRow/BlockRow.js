@@ -22,12 +22,12 @@ const BlockRow = ({
   return (
     <StyledAnimatedTableRow style={animationProps} onClick={handleRowClick}>
       <TableCell style={{ width: "10%" }}>{number}</TableCell>
-      <TableCell style={{ width: "30%" }}>
+      <TableCell style={{ width: "35%" }}>
         {moment.unix(timestamp).fromNow()}
       </TableCell>
       <TableCell style={{ width: "15%" }}>{transactions.length}</TableCell>
       <TableCell style={{ width: "20%" }}>{miner.slice(2, 7)}...</TableCell>
-      <TableCell style={{ width: "25%" }}>
+      <TableCell style={{ width: "20%" }}>
         <ProgressBar value={usedGasPercentage} title="test" />
       </TableCell>
     </StyledAnimatedTableRow>
@@ -40,7 +40,7 @@ BlockRow.propTypes = {
   number: PropTypes.number,
   miner: PropTypes.string,
   timestamp: PropTypes.number,
-  transactions: PropTypes.arrayOf(PropTypes.string)
+  transactions: PropTypes.arrayOf(PropTypes.object)
 };
 
 const StyledAnimatedTableRow = styled(animated(TableRow))`
