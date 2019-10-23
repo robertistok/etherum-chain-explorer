@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
 
 import { getLatestNBlocks } from "../utils/web3";
-import useInterval from "../hooks/useInterval";
+import { useInterval } from "../hooks";
 
 const useLatestBlocks = () => {
   const cachedBlocks = JSON.parse(localStorage.getItem("latestBlocks"));
@@ -18,6 +18,9 @@ const useLatestBlocks = () => {
         .filter(block => Boolean(block))
         .sort((a, b) => b.number - a.number)
     );
+
+  const findBlock = blockNumber =>
+    latestBlocks.find(b => b && b.number === blockNumber);
 
   async function fetchNewBlocks() {
     const fetchDataResponse = await window.web3.eth.getBlockNumber();
@@ -63,9 +66,15 @@ const useLatestBlocks = () => {
   useInterval(() => {
     fetchNewBlocks();
     setLastUpdated(new Date().getTime());
-  }, 10000);
+  }, 10 * 1000);
 
-  return { latestBlockNumber, latestBlocks, lastUpdated, storeBlock };
+  return {
+    latestBlockNumber,
+    latestBlocks,
+    lastUpdated,
+    storeBlock,
+    findBlock
+  };
 };
 
 export const LatestBlocksStateContext = createContext();
