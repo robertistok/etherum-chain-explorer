@@ -13,11 +13,15 @@ const useLatestBlocks = () => {
   const [lastUpdated, setLastUpdated] = useState(undefined);
 
   const storeBlock = block =>
-    setLatestBlocks(prev =>
-      [...prev, block]
+    setLatestBlocks(prev => {
+      const newValue = prev.find(b => b.number === block.number)
+        ? prev
+        : [...prev, block];
+
+      return newValue
         .filter(block => Boolean(block))
-        .sort((a, b) => b.number - a.number)
-    );
+        .sort((a, b) => b.number - a.number);
+    });
 
   const findBlock = blockNumber =>
     latestBlocks.find(b => b && b.number === blockNumber);
@@ -31,6 +35,7 @@ const useLatestBlocks = () => {
         : 10;
       getLatestNBlocks({
         n: numberOfBlocksToFetch,
+        returnTransactionObjects: true,
         storeBlock,
         latest: fetchDataResponse
       });
