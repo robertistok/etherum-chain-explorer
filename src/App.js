@@ -29,7 +29,7 @@ const App = () => {
 const Root = styled.main`
   flex-direction: column;
   display: flex;
-  max-width: 80%;
+  max-width: 940px;
   margin: 20px auto;
 `;
 
