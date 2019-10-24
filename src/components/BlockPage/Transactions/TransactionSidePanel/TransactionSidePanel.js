@@ -3,9 +3,7 @@ import styled from "styled-components";
 import { AddressField, SidePanel, TransactionBadge, Text } from "@aragon/ui";
 
 import { ItalicText } from "../../../common";
-
-// value, this should be kept up to date ideally
-const ETHER_VALUE_IN_USD = 160.1;
+import { getEtherValueInUSD } from "../../../../utils/web3";
 
 const TransactionSidePanel = ({ opened, transaction, handleClose }) => {
   let gasPriceInEther, valueInEther;
@@ -42,8 +40,7 @@ const TransactionSidePanel = ({ opened, transaction, handleClose }) => {
           <TransactionInfoRow>
             <TransactionInfoLabel>Value</TransactionInfoLabel>
             <Text>
-              {valueInEther} Ether (~
-              {(valueInEther * ETHER_VALUE_IN_USD).toFixed(2)}$)
+              {valueInEther} Ether (~{getEtherValueInUSD(valueInEther)}$)
             </Text>
           </TransactionInfoRow>
 
