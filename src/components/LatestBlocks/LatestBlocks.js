@@ -18,7 +18,7 @@ const LatestBlocks = () => {
   const { latestBlocks, lastUpdated } = useLatestBlocksStateValue();
   const [page, setPage] = useState(1);
 
-  const transitions = useTransition(
+  const rowTransitions = useTransition(
     latestBlocks,
     block => (block ? block.hash : nanoid()),
     {
@@ -59,7 +59,7 @@ const LatestBlocks = () => {
           </TableRow>
         }
       >
-        {transitions
+        {rowTransitions
           .slice((page - 1) * BLOCKS_PER_PAGE, BLOCKS_PER_PAGE * page)
           .map(({ item, props: animationProps, key }) => (
             <BlockRow key={key} animationProps={animationProps} {...item} />

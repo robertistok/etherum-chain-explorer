@@ -1,60 +1,59 @@
 import React from "react";
 import styled from "styled-components";
-import { Text } from "@aragon/ui";
+import { ExternalLink, Text } from "@aragon/ui";
 import moment from "moment";
 import PropTypes from "prop-types";
 
 import { ItalicText, Title } from "../../common";
-import { useLatestBlocksStateValue } from "../../../state/latestBlocks";
+import {
+  formatHash,
+  getEtherValueOfBlock,
+  getEtherValueInUSD
+} from "../../../utils/web3";
 
-const Block = ({ number, isLoading, block }) => {
-  const { latestBlockNumber } = useLatestBlocksStateValue();
+const Block = ({ number, block }) => {
+  const blockValue = getEtherValueOfBlock(block);
 
   return (
     <Root>
       <Title>Info</Title>
-      <>
-        {!block && number > latestBlockNumber && (
-          <>
-            <p>Block not mined yet...</p>
-            <p>
-              <strong>{number - latestBlockNumber}</strong> more block(s) in
-              front of it
-            </p>
-          </>
-        )}
-        {block && (
-          <BlockInfo>
-            <BlockInfoRow>
-              <ItalicText>Block height</ItalicText>
-              <Text>{block.number}</Text>
-            </BlockInfoRow>
+      <BlockInfo>
+        <BlockInfoRow>
+          <BlockInfoLabel>Block height</BlockInfoLabel>
+          <Text>{block.number}</Text>
+        </BlockInfoRow>
 
-            <BlockInfoRow>
-              <ItalicText>Timestamp</ItalicText>
-              <Text>{moment.unix(block.timestamp).fromNow()}</Text>
-            </BlockInfoRow>
+        <BlockInfoRow>
+          <BlockInfoLabel>Timestamp</BlockInfoLabel>
+          <Text>{moment.unix(block.timestamp).fromNow()}</Text>
+        </BlockInfoRow>
 
-            <BlockInfoRow>
-              <ItalicText>Gas limit</ItalicText>
-              <Text>{block.gasLimit}</Text>
-            </BlockInfoRow>
+        <BlockInfoRow>
+          <BlockInfoLabel>Gas limit</BlockInfoLabel>
+          <Text>{block.gasLimit}</Text>
+        </BlockInfoRow>
 
-            <BlockInfoRow>
-              <ItalicText>Gas used</ItalicText>
-              <Text>
-                {((block.gasUsed / block.gasLimit) * 100).toFixed(2)}%
-              </Text>
-            </BlockInfoRow>
-          </BlockInfo>
-        )}
-      </>
+        <BlockInfoRow>
+          <BlockInfoLabel>Miner</BlockInfoLabel>
+          <ExternalLink href={`https://etherscan.io/address/${block.miner}`}>
+            {formatHash(block.miner)}
+          </ExternalLink>
+        </BlockInfoRow>
+
+        <BlockInfoRow>
+          <BlockInfoLabel>Value</BlockInfoLabel>
+          <Text>
+            {blockValue} Ether (~{getEtherValueInUSD(blockValue)}$)
+          </Text>
+        </BlockInfoRow>
+      </BlockInfo>
     </Root>
   );
 };
 
 Block.propTypes = {
-  number: PropTypes.number
+  number: PropTypes.number,
+  block: PropTypes.object
 };
 
 const Root = styled.div`
@@ -62,6 +61,10 @@ const Root = styled.div`
 `;
 
 const BlockInfo = styled.div``;
+
+const BlockInfoLabel = styled(ItalicText)`
+  text-decoration: underline;
+`;
 
 const BlockInfoRow = styled.div`
   display: flex;
