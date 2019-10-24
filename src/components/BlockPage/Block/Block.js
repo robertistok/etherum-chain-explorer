@@ -13,39 +13,56 @@ import {
 
 const Block = ({ number, block }) => {
   const blockValue = getEtherValueOfBlock(block);
+  const timestampFormatted = moment.unix(block.timestamp).fromNow();
 
   return (
     <Root>
-      <Title>Info</Title>
+      <Title aria-label="Block info" tabIndex="0">
+        Info
+      </Title>
       <BlockInfo>
-        <BlockInfoRow>
+        <BlockInfoRow aria-label={`Block height, ${block.number}`} tabIndex="0">
           <BlockInfoLabel>Block height</BlockInfoLabel>
           <Text>{block.number}</Text>
         </BlockInfoRow>
 
-        <BlockInfoRow>
+        <BlockInfoRow
+          aria-label={`Timestamp, ${timestampFormatted}`}
+          tabIndex="0"
+        >
           <BlockInfoLabel>Timestamp</BlockInfoLabel>
-          <Text>{moment.unix(block.timestamp).fromNow()}</Text>
+          <Text>{timestampFormatted}</Text>
         </BlockInfoRow>
 
-        <BlockInfoRow>
+        <BlockInfoRow
+          aria-label={`Transactions count, ${block.transactions.length}`}
+          tabIndex="0"
+        >
           <BlockInfoLabel>Transactions count</BlockInfoLabel>
           <Text>{block.transactions.length}</Text>
         </BlockInfoRow>
 
-        <BlockInfoRow>
+        <BlockInfoRow aria-label={`Gas limit, ${block.gasLimit}`} tabIndex="0">
           <BlockInfoLabel>Gas limit</BlockInfoLabel>
           <Text>{block.gasLimit}</Text>
         </BlockInfoRow>
 
-        <BlockInfoRow>
+        <BlockInfoRow aria-label="Miner" tabIndex="0">
           <BlockInfoLabel>Miner</BlockInfoLabel>
-          <ExternalLink href={`https://etherscan.io/address/${block.miner}`}>
+          <ExternalLink
+            aria-label="External link, visit miner"
+            href={`https://etherscan.io/address/${block.miner}`}
+          >
             {formatHash(block.miner)}
           </ExternalLink>
         </BlockInfoRow>
 
-        <BlockInfoRow>
+        <BlockInfoRow
+          aria-label={`Value, ${blockValue} Ether (~${getEtherValueInUSD(
+            blockValue
+          )}$)`}
+          tabIndex="0"
+        >
           <BlockInfoLabel>Value</BlockInfoLabel>
           <Text>
             {blockValue} Ether (~{getEtherValueInUSD(blockValue)}$)

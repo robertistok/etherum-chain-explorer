@@ -29,7 +29,7 @@ const Pagination = ({ items = [], itemsPerPage = 10, page = 1, setPage }) => {
       >
         Previous
       </Button>
-      <Text aria-label={`Page ${page} of ${totalPages}`} smallcaps>
+      <Text aria-label={`Page ${page} of ${totalPages}`} smallcaps tabIndex="0">
         Page {page} of {totalPages}
       </Text>
       <Button

@@ -18,41 +18,55 @@ const TransactionSidePanel = ({ opened, transaction, handleClose }) => {
     <SidePanel title={`Transaction info`} opened={opened} onClose={handleClose}>
       {transaction ? (
         <>
-          <TransactionInfoRow>
+          <TransactionInfoRow aria-label="Hash" tabIndex="0">
             <TransactionInfoLabel>Hash</TransactionInfoLabel>
             <TransactionBadge shorten={false} transaction={transaction.hash} />
           </TransactionInfoRow>
 
-          <TransactionInfoRow>
+          <TransactionInfoRow
+            tabIndex="0"
+            aria-label={`Index, ${transaction.transactionIndex}`}
+          >
             <TransactionInfoLabel>Index</TransactionInfoLabel>
             <Text>{transaction.transactionIndex}</Text>
           </TransactionInfoRow>
 
-          <TransactionInfoRow>
+          <TransactionInfoRow tabIndex="0" aria-label="From address">
             <TransactionInfoLabel>From</TransactionInfoLabel>
             <AddressField address={transaction.from} />
           </TransactionInfoRow>
 
-          <TransactionInfoRow>
+          <TransactionInfoRow tabIndex="0" aria-label="To address">
             <TransactionInfoLabel>To</TransactionInfoLabel>
             <AddressField address={transaction.to} />
           </TransactionInfoRow>
 
-          <TransactionInfoRow>
+          <TransactionInfoRow
+            tabIndex="0"
+            aria-label={`Value, ${valueInEther} Ether (~${getEtherValueInUSD(
+              valueInEther
+            )}$)`}
+          >
             <TransactionInfoLabel>Value</TransactionInfoLabel>
             <Text>
               {valueInEther} Ether (~{getEtherValueInUSD(valueInEther)}$)
             </Text>
           </TransactionInfoRow>
 
-          <TransactionInfoRow>
+          <TransactionInfoRow
+            tabIndex="0"
+            aria-label={`Gas provided by the sender, ${transaction.gas}`}
+          >
             <TransactionInfoLabel>
               Gas provided by the sender
             </TransactionInfoLabel>
             <Text>{transaction.gas}</Text>
           </TransactionInfoRow>
 
-          <TransactionInfoRow>
+          <TransactionInfoRow
+            tabIndex="0"
+            aria-label={`Gas price, ${gasPriceInEther} Ether`}
+          >
             <TransactionInfoLabel>Gas price</TransactionInfoLabel>
             <Text>{gasPriceInEther} Ether</Text>
           </TransactionInfoRow>

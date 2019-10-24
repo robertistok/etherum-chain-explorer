@@ -23,13 +23,16 @@ const Transactions = ({ transactions = [] }) => {
 
   return (
     <Root>
-      <Title>Transactions sending Ether</Title>
+      <Title tabIndex="0" aria-label="Transactions sending Ether">
+        Transactions sending Ether
+      </Title>
 
       <TransactionHashesContainer>
         {transactionsSendingEther.length ? (
           transactionsSendingEther.map(t => {
             return (
               <TransactionHash
+                aria-label="Transaction, expand for more info"
                 key={t.hash}
                 mode="outline"
                 onClick={handleTransactionClick(t)}

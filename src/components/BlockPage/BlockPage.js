@@ -58,17 +58,21 @@ const BlockPage = ({ number }) => {
         </Link>
       </NavigationContainer>
 
-      <StyledTitle>
+      <StyledTitle tabIndex="0" aria-label={`Block number ${number}`}>
         Block #<ItalicText>{number}</ItalicText>
       </StyledTitle>
 
       {isLoading ? (
-        <span>Loading...</span>
+        <span aria-label="Loading" tabIndex="0">
+          Loading...
+        </span>
       ) : (
         <>
           {!block && number > latestBlockNumber && (
             <>
-              <p>Block not mined yet...</p>
+              <p aria-label="Block not mined yet" tabIndex="0">
+                Block not mined yet...
+              </p>
               <p>
                 <strong>{number - latestBlockNumber}</strong> more block(s) in
                 front of it

@@ -16,15 +16,27 @@ const BlockRow = ({
   animationProps
 }) => {
   const usedGasPercentage = gasUsed / gasLimit;
+  const timestampFormatted = moment.unix(timestamp).fromNow();
 
   const handleRowClick = () => navigate(`/block/${number}`);
+  const handleRowKeyUp = event => {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      handleRowClick();
+    }
+  };
 
   return (
-    <StyledAnimatedTableRow style={animationProps} onClick={handleRowClick}>
+    <StyledAnimatedTableRow
+      aria-label={`Block number ${number}; mined ${timestampFormatted}`}
+      role="button"
+      style={animationProps}
+      onClick={handleRowClick}
+      onKeyUp={handleRowKeyUp}
+      tabIndex={0}
+    >
       <TableCell style={{ width: "10%" }}>{number}</TableCell>
-      <TableCell style={{ width: "35%" }}>
-        {moment.unix(timestamp).fromNow()}
-      </TableCell>
+      <TableCell style={{ width: "35%" }}>{timestampFormatted}</TableCell>
       <TableCell style={{ width: "15%" }}>{transactions.length}</TableCell>
       <TableCell style={{ width: "20%" }}>{miner.slice(2, 7)}...</TableCell>
       <TableCell style={{ width: "20%" }}>

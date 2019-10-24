@@ -13,11 +13,19 @@ const GraphData = ({ block = {} }) => {
 
   return (
     <Root>
-      <CircleGraphWithLabel>
+      <CircleGraphWithLabel
+        tabIndex={0}
+        aria-label={`${(gasUsedPercentage * 100).toFixed(2)}% gas used`}
+      >
         <CircleGraph size={120} value={gasUsedPercentage} />
         <CircleGraphLabel>Gas used</CircleGraphLabel>
       </CircleGraphWithLabel>
-      <CircleGraphWithLabel>
+      <CircleGraphWithLabel
+        tabIndex={0}
+        aria-label={`${(transactionsSendingEtherPercentage * 100).toFixed(
+          2
+        )}% transactions sending ether`}
+      >
         <CircleGraph size={120} value={transactionsSendingEtherPercentage} />
         <CircleGraphLabel>Transactions sending Ether</CircleGraphLabel>
       </CircleGraphWithLabel>
