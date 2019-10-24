@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link } from "@reach/router";
-import { Button } from "@aragon/ui";
+import { Button, Card } from "@aragon/ui";
 
 import Block from "./Block";
+import Transactions from "./Transactions";
 import promisify from "../../utils/promisify";
 import { useLatestBlocksStateValue } from "../../state/latestBlocks";
 import { useDataApi } from "../../hooks";
+import { Title, ItalicText } from "../common";
 
 const BlockPage = ({ number }) => {
   const numberParsed = Number(number);
@@ -37,18 +39,30 @@ const BlockPage = ({ number }) => {
   return (
     <Root>
       <NavigationContainer>
+        <Link to="/" style={{ marginRight: "auto" }}>
+          <Button mode="strong">Home</Button>
+        </Link>
+
         <Link to={`/block/${numberParsed - 1}`}>
           <Button mode="secondary">Previous block</Button>
-        </Link>
-        <Link to="/">
-          <Button mode="strong">Home</Button>
         </Link>
         <Link to={`/block/${numberParsed + 1}`}>
           <Button mode="secondary">Next block</Button>
         </Link>
       </NavigationContainer>
 
-      <Block block={block} isLoading={isLoading} number={numberParsed} />
+      <StyledTitle>
+        Block #<ItalicText>{number}</ItalicText>
+      </StyledTitle>
+      {isLoading ? (
+        <span>Loading...</span>
+      ) : (
+        <InfoContainer>
+          <Block block={block} isLoading={isLoading} number={numberParsed} />
+          <div>Nothin here yet.. </div>
+          <Transactions transactions={block ? block.transactions : []} />
+        </InfoContainer>
+      )}
     </Root>
   );
 };
@@ -59,6 +73,28 @@ const NavigationContainer = styled.nav`
   display: flex;
   justify-content: space-between;
   margin-bottom: 30px;
+
+  a {
+    margin-right: 10px;
+
+    &:last-of-type {
+      margin-right: 0px;
+    }
+  }
+`;
+
+const StyledTitle = styled(Title)`
+  margin-bottom: 10px;
+`;
+
+const InfoContainer = styled(Card)`
+  width: 100%;
+  min-height: 500px;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 200px);
+  grid-gap: 10px;
 `;
 
 export default BlockPage;
