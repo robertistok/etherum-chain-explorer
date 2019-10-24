@@ -5,15 +5,21 @@ import { Button, Card } from "@aragon/ui";
 
 import Block from "./Block";
 import Transactions from "./Transactions";
+import GraphData from "./GraphData";
+import { Title, ItalicText } from "../common";
+
 import promisify from "../../utils/promisify";
 import { useLatestBlocksStateValue } from "../../state/latestBlocks";
 import { useDataApi } from "../../hooks";
-import { Title, ItalicText } from "../common";
 
 const BlockPage = ({ number }) => {
   const numberParsed = Number(number);
 
-  const { storeBlock, findBlock } = useLatestBlocksStateValue();
+  const {
+    storeBlock,
+    findBlock,
+    latestBlockNumber
+  } = useLatestBlocksStateValue();
 
   const alreadyFetchedBlock = findBlock(numberParsed);
   const [block, setBlock] = useState(alreadyFetchedBlock);
@@ -54,14 +60,32 @@ const BlockPage = ({ number }) => {
       <StyledTitle>
         Block #<ItalicText>{number}</ItalicText>
       </StyledTitle>
+
       {isLoading ? (
         <span>Loading...</span>
       ) : (
-        <InfoContainer>
-          <Block block={block} isLoading={isLoading} number={numberParsed} />
-          <div>Nothin here yet.. </div>
-          <Transactions transactions={block ? block.transactions : []} />
-        </InfoContainer>
+        <>
+          {!block && number > latestBlockNumber && (
+            <>
+              <p>Block not mined yet...</p>
+              <p>
+                <strong>{number - latestBlockNumber}</strong> more block(s) in
+                front of it
+              </p>
+            </>
+          )}
+          {block && (
+            <InfoContainer>
+              <Block
+                block={block}
+                isLoading={isLoading}
+                number={numberParsed}
+              />
+              <GraphData block={block} />
+              <Transactions transactions={block ? block.transactions : []} />
+            </InfoContainer>
+          )}
+        </>
       )}
     </Root>
   );
