@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Button } from "@aragon/ui";
 
 import { Title } from "../../common";
-import { formatTransactionHash } from "../../../utils/web3";
+import { formatHash } from "../../../utils/web3";
 import TransactionSidePanel from "./TransactionSidePanel";
 
 const Transactions = ({ transactions = [] }) => {
@@ -32,7 +32,7 @@ const Transactions = ({ transactions = [] }) => {
               mode="outline"
               onClick={handleTransactionClick(t)}
             >
-              {formatTransactionHash(t.hash)}
+              {formatHash(t.hash)}
             </TransactionHash>
           );
         })}
