@@ -29,6 +29,11 @@ const Block = ({ number, block }) => {
         </BlockInfoRow>
 
         <BlockInfoRow>
+          <BlockInfoLabel>Transactions count</BlockInfoLabel>
+          <Text>{block.transactions.length}</Text>
+        </BlockInfoRow>
+
+        <BlockInfoRow>
           <BlockInfoLabel>Gas limit</BlockInfoLabel>
           <Text>{block.gasLimit}</Text>
         </BlockInfoRow>
