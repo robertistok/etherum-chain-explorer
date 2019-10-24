@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { AddressField, SidePanel, TransactionBadge, Text } from "@aragon/ui";
+import PropTypes from "prop-types";
 
 import { ItalicText } from "../../../common";
 import { getEtherValueInUSD } from "../../../../utils/web3";
@@ -59,6 +60,12 @@ const TransactionSidePanel = ({ opened, transaction, handleClose }) => {
       ) : null}
     </SidePanel>
   );
+};
+
+TransactionSidePanel.propTypes = {
+  opened: PropTypes.bool.isRequired,
+  transaction: PropTypes.object,
+  handleClose: PropTypes.func.isRequired
 };
 
 const TransactionInfoRow = styled.div`

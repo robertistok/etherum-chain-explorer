@@ -59,7 +59,7 @@ Pagination.defaultProps = {
   page: 1
 };
 
-const Root = styled.div`
+const Root = styled.nav`
   display: flex;
   flex-direction: row;
   justify-content: space-between;

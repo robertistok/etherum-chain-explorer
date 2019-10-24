@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link } from "@reach/router";
 import { Button, Card } from "@aragon/ui";
+import PropTypes from "prop-types";
 
 import Block from "./Block";
 import Transactions from "./Transactions";
@@ -76,19 +77,19 @@ const BlockPage = ({ number }) => {
           )}
           {block && (
             <InfoContainer>
-              <Block
-                block={block}
-                isLoading={isLoading}
-                number={numberParsed}
-              />
+              <Block block={block} number={numberParsed} />
               <GraphData block={block} />
-              <Transactions transactions={block ? block.transactions : []} />
+              <Transactions transactions={block.transactions} />
             </InfoContainer>
           )}
         </>
       )}
     </Root>
   );
+};
+
+BlockPage.propTypes = {
+  number: PropTypes.string
 };
 
 const Root = styled.section``;

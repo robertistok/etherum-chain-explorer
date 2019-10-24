@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Button } from "@aragon/ui";
+import PropTypes from "prop-types";
 
 import { Title } from "../../common";
 import { formatHash } from "../../../utils/web3";
@@ -44,6 +45,10 @@ const Transactions = ({ transactions = [] }) => {
       />
     </Root>
   );
+};
+
+Transactions.propTypes = {
+  transactions: PropTypes.arrayOf(PropTypes.object)
 };
 
 const Root = styled.div`

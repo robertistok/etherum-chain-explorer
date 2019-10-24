@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { CircleGraph } from "@aragon/ui";
+import PropTypes from "prop-types";
 
 const GraphData = ({ block = {} }) => {
   const { transactions = [] } = block;
@@ -8,7 +9,7 @@ const GraphData = ({ block = {} }) => {
   const transactionsSendingEtherPercentage = transactions.length
     ? transactionsSendingEther.length / transactions.length
     : 0;
-  const gasUsedPercentage = block ? block.gasUsed / block.gasLimit : 0;
+  const gasUsedPercentage = block.gasUsed / block.gasLimit;
 
   return (
     <Root>
@@ -22,6 +23,10 @@ const GraphData = ({ block = {} }) => {
       </CircleGraphWithLabel>
     </Root>
   );
+};
+
+GraphData.propTypes = {
+  block: PropTypes.object
 };
 
 const Root = styled.div`
