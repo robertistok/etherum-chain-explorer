@@ -33,7 +33,7 @@ const LatestBlocks = () => {
 
   return (
     <Root>
-      <Title>
+      <Title aria-label="Latest blocks on the Etherum chain" tabIndex="0">
         Latest blocks on the Etherum chain (updated:&nbsp;
         <em>
           {`${lastUpdated ? formatTime({ timestamp: lastUpdated }) : "never"}`}
@@ -41,30 +41,40 @@ const LatestBlocks = () => {
         )
       </Title>
 
-      <Pagination
-        items={latestBlocks}
-        itemsPerPage={BLOCKS_PER_PAGE}
-        page={page}
-        setPage={setPage}
-      />
-
-      <StyledTable
-        header={
-          <TableRow>
-            <TableHeader title="Block" />
-            <TableHeader title="Mined" />
-            <TableHeader title="Txn" />
-            <TableHeader title="Miner" />
-            <TableHeader title="Gas used" />
-          </TableRow>
-        }
-      >
-        {rowTransitions
-          .slice((page - 1) * BLOCKS_PER_PAGE, BLOCKS_PER_PAGE * page)
-          .map(({ item, props: animationProps, key }) => (
-            <BlockRow key={key} animationProps={animationProps} {...item} />
-          ))}
-      </StyledTable>
+      {rowTransitions.length ? (
+        <>
+          <Pagination
+            items={latestBlocks}
+            itemsPerPage={BLOCKS_PER_PAGE}
+            page={page}
+            setPage={setPage}
+          />
+          <StyledTable
+            header={
+              <TableRow>
+                <TableHeader title="Block" />
+                <TableHeader title="Mined" />
+                <TableHeader title="Txn" />
+                <TableHeader title="Miner" />
+                <TableHeader title="Gas used" />
+              </TableRow>
+            }
+          >
+            {rowTransitions
+              .slice((page - 1) * BLOCKS_PER_PAGE, BLOCKS_PER_PAGE * page)
+              .map(({ item, props: animationProps, key }) => (
+                <BlockRow key={key} animationProps={animationProps} {...item} />
+              ))}
+          </StyledTable>
+        </>
+      ) : (
+        <span
+          aria-label="Please wait a few seconds, the blocks are loading"
+          tabIndex="0"
+        >
+          Please wait a few seconds, the blocks are loading!
+        </span>
+      )}
     </Root>
   );
 };
