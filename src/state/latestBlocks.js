@@ -40,6 +40,8 @@ const useLatestBlocks = () => {
         latest: fetchDataResponse
       });
     }
+
+    setLastUpdated(new Date().getTime());
   }
 
   useEffect(() => {
@@ -70,7 +72,6 @@ const useLatestBlocks = () => {
 
   useInterval(() => {
     fetchNewBlocks();
-    setLastUpdated(new Date().getTime());
   }, 10 * 1000);
 
   return {
