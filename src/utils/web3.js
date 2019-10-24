@@ -28,3 +28,6 @@ export const getLatestNBlocks = async ({
     });
   });
 };
+
+export const formatTransactionHash = hash =>
+  `${hash.slice(0, 4)}...${hash.slice(hash.length - 4)}`;
