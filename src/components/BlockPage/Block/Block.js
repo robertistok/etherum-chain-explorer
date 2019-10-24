@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { Card, Text } from "@aragon/ui";
+import { Text } from "@aragon/ui";
 import moment from "moment";
 import PropTypes from "prop-types";
 
-import { BoldText, Title } from "../../common";
+import { ItalicText, Title } from "../../common";
 import { useLatestBlocksStateValue } from "../../../state/latestBlocks";
 
 const Block = ({ number, isLoading, block }) => {
@@ -12,48 +12,43 @@ const Block = ({ number, isLoading, block }) => {
 
   return (
     <Root>
-      <StyledTitle>Block #{number}</StyledTitle>
+      <Title>Info</Title>
+      <>
+        {!block && number > latestBlockNumber && (
+          <>
+            <p>Block not mined yet...</p>
+            <p>
+              <strong>{number - latestBlockNumber}</strong> more block(s) in
+              front of it
+            </p>
+          </>
+        )}
+        {block && (
+          <BlockInfo>
+            <BlockInfoRow>
+              <ItalicText>Block height</ItalicText>
+              <Text>{block.number}</Text>
+            </BlockInfoRow>
 
-      {isLoading ? (
-        <span>Loading...</span>
-      ) : (
-        <>
-          {!block && number > latestBlockNumber && (
-            <>
-              <p>Block not mined yet...</p>
-              <p>
-                <strong>{number - latestBlockNumber}</strong> more block(s) in
-                front of it
-              </p>
-            </>
-          )}
-          {block && (
-            <BlockInfo>
-              <BlockInfoRow>
-                <BoldText>Block height</BoldText>
-                <Text>{block.number}</Text>
-              </BlockInfoRow>
+            <BlockInfoRow>
+              <ItalicText>Timestamp</ItalicText>
+              <Text>{moment.unix(block.timestamp).fromNow()}</Text>
+            </BlockInfoRow>
 
-              <BlockInfoRow>
-                <BoldText>Timestamp</BoldText>
-                <Text>{moment.unix(block.timestamp).fromNow()}</Text>
-              </BlockInfoRow>
+            <BlockInfoRow>
+              <ItalicText>Gas limit</ItalicText>
+              <Text>{block.gasLimit}</Text>
+            </BlockInfoRow>
 
-              <BlockInfoRow>
-                <BoldText>Gas limit</BoldText>
-                <Text>{block.gasLimit}</Text>
-              </BlockInfoRow>
-
-              <BlockInfoRow>
-                <BoldText>Gas used</BoldText>
-                <Text>
-                  {((block.gasUsed / block.gasLimit) * 100).toFixed(2)}%
-                </Text>
-              </BlockInfoRow>
-            </BlockInfo>
-          )}
-        </>
-      )}
+            <BlockInfoRow>
+              <ItalicText>Gas used</ItalicText>
+              <Text>
+                {((block.gasUsed / block.gasLimit) * 100).toFixed(2)}%
+              </Text>
+            </BlockInfoRow>
+          </BlockInfo>
+        )}
+      </>
     </Root>
   );
 };
@@ -62,16 +57,7 @@ Block.propTypes = {
   number: PropTypes.number
 };
 
-const Root = styled(Card)`
-  width: 100%;
-  padding: 20px;
-  display: grid;
-  grid-template-columns: 40% auto;
-  grid-template-rows: 50px auto;
-`;
-
-const StyledTitle = styled(Title)`
-  margin-bottom: 20px;
+const Root = styled.div`
   grid-area: 1 / 1 / 1 / span 2;
 `;
 
