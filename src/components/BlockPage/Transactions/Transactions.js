@@ -26,17 +26,21 @@ const Transactions = ({ transactions = [] }) => {
       <Title>Transactions sending Ether</Title>
 
       <TransactionHashesContainer>
-        {transactionsSendingEther.map(t => {
-          return (
-            <TransactionHash
-              key={t.hash}
-              mode="outline"
-              onClick={handleTransactionClick(t)}
-            >
-              {formatHash(t.hash)}
-            </TransactionHash>
-          );
-        })}
+        {transactionsSendingEther.length ? (
+          transactionsSendingEther.map(t => {
+            return (
+              <TransactionHash
+                key={t.hash}
+                mode="outline"
+                onClick={handleTransactionClick(t)}
+              >
+                {formatHash(t.hash)}
+              </TransactionHash>
+            );
+          })
+        ) : (
+          <span>None...</span>
+        )}
       </TransactionHashesContainer>
 
       <TransactionSidePanel
