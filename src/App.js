@@ -31,6 +31,10 @@ const Root = styled.main`
   display: flex;
   max-width: 940px;
   margin: 20px auto;
+
+  @media screen and (max-width: 960px) {
+    margin: 20px;
+  }
 `;
 
 export default App;
