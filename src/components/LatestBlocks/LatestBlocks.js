@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useTransition } from "react-spring";
 import nanoid from "nanoid";
@@ -14,13 +14,27 @@ import { formatTime } from "../../utils/time";
 
 const BLOCKS_PER_PAGE = 10;
 
+const placeholders = [...Array(BLOCKS_PER_PAGE)]
+  .fill(undefined)
+  .map(() => ({ key: nanoid() }));
+
 const LatestBlocks = () => {
   const { latestBlocks, lastUpdated } = useLatestBlocksStateValue();
   const [page, setPage] = useState(1);
+  const [rowsToMapOver, setRowsToMapOver] = useState([]);
+
+  useEffect(() => {
+    const rowPlaceHolders = placeholders.slice(
+      0,
+      BLOCKS_PER_PAGE - latestBlocks.slice(0, 10).length
+    );
+
+    setRowsToMapOver([...latestBlocks, ...rowPlaceHolders]);
+  }, [latestBlocks]);
 
   const rowTransitions = useTransition(
-    latestBlocks,
-    block => (block ? block.hash : nanoid()),
+    rowsToMapOver,
+    block => block.hash || block.key,
     {
       from: item => ({
         opacity: 0,
@@ -63,7 +77,12 @@ const LatestBlocks = () => {
             {rowTransitions
               .slice((page - 1) * BLOCKS_PER_PAGE, BLOCKS_PER_PAGE * page)
               .map(({ item, props: animationProps, key }) => (
-                <BlockRow key={key} animationProps={animationProps} {...item} />
+                <BlockRow
+                  key={key}
+                  animationProps={animationProps}
+                  showPlaceHolder={!item.hash}
+                  {...item}
+                />
               ))}
           </StyledTable>
         </>

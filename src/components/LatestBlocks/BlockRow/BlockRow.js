@@ -6,6 +6,10 @@ import { navigate } from "@reach/router";
 import moment from "moment";
 import { ProgressBar, TableRow, TableCell } from "@aragon/ui";
 
+import { TextPlaceholder } from "../../common";
+
+import { formatHash } from "../../../utils/web3";
+
 const BlockRow = ({
   gasUsed,
   gasLimit,
@@ -13,10 +17,13 @@ const BlockRow = ({
   miner,
   timestamp,
   transactions,
-  animationProps
+  animationProps,
+  showPlaceHolder
 }) => {
-  const usedGasPercentage = gasUsed / gasLimit;
+  const usedGasPercentage = gasUsed && gasLimit ? gasUsed / gasLimit : 0;
   const timestampFormatted = moment.unix(timestamp).fromNow();
+  const transactionsCount = transactions ? transactions.length : null;
+  const minerFormatted = miner ? formatHash(miner) : null;
 
   const handleRowClick = () => navigate(`/block/${number}`);
   const handleRowKeyUp = event => {
@@ -35,12 +42,30 @@ const BlockRow = ({
       onKeyUp={handleRowKeyUp}
       tabIndex={0}
     >
-      <TableCell style={{ width: "10%" }}>{number}</TableCell>
-      <TableCell style={{ width: "35%" }}>{timestampFormatted}</TableCell>
-      <TableCell style={{ width: "15%" }}>{transactions.length}</TableCell>
-      <TableCell style={{ width: "20%" }}>{miner.slice(2, 7)}...</TableCell>
+      <TableCell style={{ width: "10%" }}>
+        <TextPlaceholder ready={!showPlaceHolder}>
+          <span>{number}</span>
+        </TextPlaceholder>
+      </TableCell>
+      <TableCell style={{ width: "35%" }}>
+        <TextPlaceholder ready={!showPlaceHolder}>
+          <span>{timestampFormatted}</span>
+        </TextPlaceholder>
+      </TableCell>
+      <TableCell style={{ width: "15%" }}>
+        <TextPlaceholder ready={!showPlaceHolder}>
+          <span>{transactionsCount}</span>
+        </TextPlaceholder>
+      </TableCell>
       <TableCell style={{ width: "20%" }}>
-        <ProgressBar value={usedGasPercentage} title="test" />
+        <TextPlaceholder ready={!showPlaceHolder}>
+          <span>{minerFormatted}</span>
+        </TextPlaceholder>
+      </TableCell>
+      <TableCell style={{ width: "20%" }}>
+        <TextPlaceholder ready={!showPlaceHolder}>
+          <ProgressBar value={usedGasPercentage} />
+        </TextPlaceholder>
       </TableCell>
     </StyledAnimatedTableRow>
   );
