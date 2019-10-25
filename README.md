@@ -4,4 +4,4 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## URL
 
-https://etherum-chain-explorer.netlify.com
+https://etherum-chain-explorer-b82hyceo6.now.sh/
