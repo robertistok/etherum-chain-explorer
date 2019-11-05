@@ -70,11 +70,7 @@ const useLatestBlocks = () => {
 
 export const LatestBlocksStateContext = createContext();
 
-export const LatestBlocksStateProvider = ({
-  rowsCount,
-  columnsCount,
-  children
-}) => (
+export const LatestBlocksStateProvider = ({ children }) => (
   <LatestBlocksStateContext.Provider value={useLatestBlocks()}>
     {children}
   </LatestBlocksStateContext.Provider>
